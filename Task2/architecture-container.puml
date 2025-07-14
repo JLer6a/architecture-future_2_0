@@ -1,0 +1,53 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Container(dataPlatform, "Data Platform / Lakehouse", "Apache Iceberg / Delta Lake + S3/HDFS + Spark/Presto", "Хранилище сырых и обработанных данных")
+Container(dataProducts, "Data Product (витрины)", "dbt + Snowflake / BigQuery / ClickHouse", "Витрины по бизнес-доменам")
+Container(biPortal, "Self-Service BI Portal", "Superset / Metabase / Power BI Gateway", "BI-портал с доступом к витринам")
+Container(streamingPlatform, "Event Streaming Platform", "Apache Kafka / Redpanda", "Шина событий")
+Container(apiGateway, "API Gateway", "Kong / Spring Cloud Gateway", "Централизованная точка входа для API")
+Container(governance, "Data Governance Platform", "Apache Atlas / Amundsen / Collibra", "Каталог, lineage, ACL")
+Container(dataIngest, "Data Ingest Services", "Apache NiFi / Airbyte / custom ETL", "Импорт данных из внешних и legacy источников")
+Container(aiServices, "AI Services (ML API)", "Python FastAPI + MLflow", "Диагностика и анализ медицинских данных")
+Container(fintechServices, "Финтех Сервисы", "Java/Golang + PostgreSQL + Kafka", "Банковские продукты")
+Container(legacyUI, "Клиники / Операторский UI", "React + Spring Boot", "Web-интерфейс операторов")
+Container(operatorBackend, "Operator Backend Service", "Spring Boot", "Обработка UI-запросов, отправка событий в Kafka")
+
+
+' === Взаимодействия ===
+
+' UI через API Gateway
+Rel(legacyUI, apiGateway, "REST/GraphQL вызовы", "HTTPS")
+Rel(apiGateway, operatorBackend, "Проксирование UI-запросов", "REST")
+
+' Backend публикует события
+Rel(operatorBackend, streamingPlatform, "Публикует бизнес-события", "Kafka Producer")
+
+' AI сервисы читают и пишут в Kafka
+Rel(streamingPlatform, aiServices, "AI читает медицинские события", "Kafka Consumer")
+Rel(aiServices, streamingPlatform, "AI публикует обработанные данные", "Kafka Producer")
+
+' Финтех сервисы обмениваются через Kafka
+Rel(fintechServices, streamingPlatform, "Публикует финтех-события", "Kafka Producer")
+Rel(streamingPlatform, fintechServices, "Слушает события и statusing", "Kafka Consumer")
+
+' Ingest сервисы
+Rel(dataIngest, streamingPlatform, "Потоки из источников и CDC", "Kafka Producer")
+
+' Kafka → Lakehouse
+Rel(streamingPlatform, dataPlatform, "Загрузка событий в Lakehouse", "Streaming ingestion")
+
+' Витрины
+Rel(dataPlatform, dataProducts, "Витрины формируются из Lake", "Batch/ETL")
+Rel(dataProducts, biPortal, "BI получает доступ к витринам", "SQL / API")
+
+' API доступ
+Rel(apiGateway, aiServices, "REST к ML API", "HTTPS")
+Rel(apiGateway, fintechServices, "REST к финансовым данным", "HTTPS")
+Rel(apiGateway, biPortal, "UI для BI аналитики", "HTTPS")
+
+' Data Governance
+Rel(governance, dataPlatform, "Сбор метаданных, lineage", "Metadata sync")
+Rel(governance, dataProducts, "Каталогизация витрин", "Catalog API")
+
+@enduml
