@@ -1,0 +1,98 @@
+{
+  "basePath": "/",
+  "dataDirectory": ".techradar/2025-07-14",
+  "logoFile": "logo.svg",
+  "sections": ["radar", "tags", "list"],
+  "colors": {
+    "foreground": "#fcf2e6",
+    "background": "#112233",
+    "highlight": "#d4a373",
+    "content": "#ffffff",
+    "text": "#dddddd",
+    "link": "#bc6c25",
+    "border": "rgba(255,255,255,0.2)",
+    "tag": "rgba(255,255,255,0.1)"
+  },
+  "quadrants": [
+    {
+      "id": "languages-and-frameworks",
+      "title": "Языки и Фреймворки",
+      "color": "#336699"
+    },
+    {
+      "id": "methods-and-patterns",
+      "title": "Методы и Паттерны",
+      "color": "#996633"
+    },
+    {
+      "id": "platforms-and-operations",
+      "title": "Платформы и Операции",
+      "color": "#669966"
+    },
+    {
+      "id": "tools",
+      "title": "Инструменты",
+      "color": "#cc6666"
+    }
+  ],
+  "rings": [
+    {
+      "id": "adopt",
+      "title": "Активно используем",
+      "color": "#4CAF50",
+      "radius": 0.5,
+      "strokeWidth": 5
+    },
+    {
+      "id": "trial",
+      "title": "Пробуем",
+      "color": "#2196F3",
+      "radius": 0.69,
+      "strokeWidth": 3
+    },
+    {
+      "id": "assess",
+      "title": "Изучаем",
+      "color": "#FF9800",
+      "radius": 0.85,
+      "strokeWidth": 2
+    },
+    {
+      "id": "hold",
+      "title": "Выкидываем",
+      "color": "#f44336",
+      "radius": 1,
+      "strokeWidth": 1
+    }
+  ],
+  "flags": {
+    "new": {
+      "color": "#00e676",
+      "title": "Новое",
+      "titleShort": "N",
+      "description": "Добавлено недавно"
+    },
+    "changed": {
+      "color": "#2979ff",
+      "title": "Изменено",
+      "titleShort": "C",
+      "description": "Обновлённое положение"
+    },
+    "default": {
+      "description": "Без изменений"
+    }
+  },
+  "chart": {
+    "size": 800,
+    "blipSize": 12
+  },
+  "labels": {
+    "title": "Tech Radar — Будущее 2.0",
+    "footer": "Разработано в рамках проекта по архитектуре",
+    "zoomIn": "Увеличить",
+    "filterByTag": "Фильтр по тегам",
+    "quadrant": "Категория",
+    "quadrantOverview": "Обзор квадранта",
+    "notUpdated": "Давно не менялось"
+  }
+}
